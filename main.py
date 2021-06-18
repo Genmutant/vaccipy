@@ -3,6 +3,7 @@
 import argparse
 import copy
 import json
+import logging
 import os
 
 from tools.exceptions import ValidationError, PushoverNotificationError, TelegramNotificationError
@@ -16,6 +17,7 @@ from tools.chromium_downloader import check_chromium, download_chromium, check_w
 
 PATH = os.path.dirname(os.path.realpath(__file__))
 
+logging.basicConfig(filename='warnings.log', encoding='utf-8', level=logging.WARNING)
 
 def update_kontaktdaten_interactive(
         known_kontaktdaten,
@@ -385,6 +387,7 @@ def gen_code(kontaktdaten):
     except RuntimeError as exc:
         print(
             f"\nDie Code-Generierung war leider nicht erfolgreich:\n{str(exc)}")
+        logging.warning("Die Code-Generierung war leider nicht erfolgreich", exc_info=exc)
         return False
 
     print("Die Code-Generierung war leider nicht erfolgreich.")
@@ -566,6 +569,7 @@ def main():
                 print()
             except Exception as exc:
                 print(f"\nFehler:\n{str(exc)}\n")
+                logging.warning("Fehler", exc_info=exc)
 
 
 if __name__ == "__main__":
